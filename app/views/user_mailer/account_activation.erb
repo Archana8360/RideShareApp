@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  </head>
+
+  <body>
+    <h1>Hi <%= @user.email %>,</h1>
+
+    <p>Welcome to our application! Please click on the following link to activate your account:</p>
+
+    <p><%= link_to "Activate my account", edit_account_activation_url(@user.activate_token) %></p>
+
+    <p>If you did not sign up for our application, please ignore this email.</p>
+
+    <p>Thank you for your interest in our application!</p>
+
+    <p>Best regards,</p>
+  </body>
+</html>
