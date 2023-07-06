@@ -8,10 +8,10 @@ class Info < ApplicationRecord
     has_one_attached :image, :dependent => :destroy
     def send_passcode
         response = TwoFactor.send_passcode(phone_no)
-        debugger
+        
         if response['Status'].downcase == 'success'
           update_column(:session_key, response['Details'])
-          trues
+          return true
         end
     end
 

@@ -12,8 +12,11 @@ Rails.application.routes.draw do
 
   post "sendotp",to:"infos#sendotp"
   post "verifyotp",to:"infos#verifyotp"
+  post "ride/rating",to:"rides#rating"
+  get "info/givenRating",to:"infos#givenRating"
+  get "info/recievedRating",to:"infos#recievedRating"
 
-
+  mount ActionCable.server => "/cable"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

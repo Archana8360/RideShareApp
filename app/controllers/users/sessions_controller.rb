@@ -4,14 +4,18 @@
 class Users::SessionsController < Devise::SessionsController
   respond_to :json 
   
+
+
+
   private
 
   def respond_with(resource, options={})
     if current_user.nil?
       render json: {message: "Invalid Path"}
     else
-    render json: {
-      status: { code: 200, message: 'User Signed in successfully', data: current_user }
+      render json: {
+      
+      status: { code: 200, message: 'User Signed in successfully', data: current_user,token: request.env['warden-jwt_auth.token'] }
       }, status: :ok
     end
   end

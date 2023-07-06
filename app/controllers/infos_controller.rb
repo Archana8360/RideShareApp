@@ -18,8 +18,17 @@ class InfosController < ApplicationController
 
   # GET /infos/1
   def show 
+
+    @ratings = Rating.where(rating_receiver:@info.user_id)
+    @rating_average = @ratings.average(:rating)
+    @ratings_group = @ratings.group(:rating).count
+    if @ratings.length >0
+      @rating = {average:@rating_average,groups:@ratings_group,data:@ratings}
+    else
+      @rating = {error:"No rating are received yet"}
+    end
     render json: {
-      status: {code: 200, message: 'My profile', data: @info}
+      status: {code: 200, message: 'My profile', data: @info,rating:@rating}
     }
   end
 
@@ -75,12 +84,35 @@ class InfosController < ApplicationController
     verification_params = params.permit(:mobile, :passcode)
     @info = Info.find_by(phone_no:verification_params[:mobile])
     if @info && @info.verify_passcode(verification_params[:passcode])
-      render(json: {info: @info}, status: :ok)
+      render(json: {message:"Account Verified"}, status: :ok)
     else
       render(json: {error: 'Failed to verify passcode'}, status: :unauthorized)
     end
   end
   
+
+  def givenRating
+    @ratings = Rating.where(rating_giver:current_user.id)
+    debugger
+    if @ratings
+      render json:{status:200,data:@ratings}
+    else
+      render json:{error:"No Rating given yet"}
+    end
+  end
+
+
+  def recievedRating
+    @ratings = Rating.where(rating_receiver:current_user.id)
+    @rating_average = @ratings.average(:rating)
+    @ratings_group = @ratings.group(:rating).count
+    
+    if @ratings.length >0
+      render json:{status:200,average:@rating_average,groups:@ratings_group,data:@ratings}
+    else
+      render json:{error:"No rating are received yet"}
+    end
+  end
 
 
 
